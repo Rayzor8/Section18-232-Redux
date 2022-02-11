@@ -1,12 +1,14 @@
 import classes from './Counter.module.css';
 import { useSelector, useDispatch } from 'react-redux';
+import { counterActions } from '../store/index';
 
 const Counter = () => {
    const { counter, toggleCounter } = useSelector((state) => state);
+   const { decrement, increase, increment, toggle } = counterActions;
 
    const dispatch = useDispatch();
    const toggleCounterHandler = () => {
-      dispatch({ type: 'toggle' });
+      dispatch(toggle());
    };
 
    return (
@@ -15,19 +17,19 @@ const Counter = () => {
          {toggleCounter && <div className={classes.value}>{counter}</div>}
          <div className={classes['button-group']}>
             <button
-               onClick={() => dispatch({ type: 'increment' })}
+               onClick={() => dispatch(increment())}
                disabled={toggleCounter === false}
             >
                Increment
             </button>
             <button
-               onClick={() => dispatch({ type: 'increase', payload: 5 })}
+               onClick={() => dispatch(increase(5))}
                disabled={toggleCounter === false}
             >
                Increase by 5
             </button>
             <button
-               onClick={() => dispatch({ type: 'decrement' })}
+               onClick={() => dispatch(decrement())}
                disabled={toggleCounter === false}
             >
                Decrement

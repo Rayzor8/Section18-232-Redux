@@ -1,46 +1,32 @@
-import { createStore } from 'redux';
+import { createSlice, configureStore } from '@reduxjs/toolkit';
 
 const initialState = {
    counter: 0,
    toggleCounter: false,
 };
 
-const counterReducer = (state, action) => {
-   console.log(state);
-   // rules of redux never mutate your state initialState, always replace initialState state with new state
-   // copy and create new state
-   // for predictable behavior 
-   // source ref : primitive type vs reference type
-   if (action.type === 'increment') {
-      return {
-         ...state,
-         counter: state.counter + 1,
-      };
-   }
+const counterSlice = createSlice({
+   name: 'counter',
+   initialState,
+   reducers: {
+      increment(state) {
+         state.counter++;
+      },
+      decrement(state) {
+         state.counter > 0 && state.counter--;
+      },
+      increase(state, action) {
+         state.counter += action.payload;
+      },
+      toggle(state) {
+         state.toggleCounter = !state.toggleCounter;
+      },
+   },
+});
 
-   if (action.type === 'increase') {
-      return {
-         ...state,
-         counter: state.counter + action.payload,
-      };
-   }
+const store = configureStore({
+   reducer: counterSlice.reducer,
+});
 
-   if (state.counter > 0 && action.type === 'decrement') {
-      return {
-         ...state,
-         counter: state.counter - 1,
-      };
-   }
-
-   if (action.type === 'toggle') {
-      return {
-         counter: initialState.counter, // reset state to initial state
-         toggleCounter: !state.toggleCounter,
-      };
-   }
-   return state;
-};
-
-const store = createStore(counterReducer, initialState);
-
+export const counterActions = counterSlice.actions;
 export default store;
